@@ -1,0 +1,9 @@
+{
+    "name": "ProjectName", // Name of Project
+    "engineVersion": 0.1, // Version of Target Engine
+    "projectVersion": 0.1, // Version of Project (User Defined)
+    "engine": true, // Whether to build as engine or not
+    "src": "./src/", // Source Directory
+    "cmake": ".", // Where custom CMakeLists.txt is located
+    "install": "install.sh" // Install Script
+}

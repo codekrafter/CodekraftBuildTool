@@ -1,0 +1,13 @@
+/Users/codekrafter/Documents/Code/Projects/CodekraftEngine/build-tool/bin/x64/Release/netcoreapp2.0/osx-x64/libhostpolicy.dylib
+/Users/codekrafter/Documents/Code/Projects/CodekraftEngine/build-tool/bin/x64/Release/netcoreapp2.0/osx-x64/libhostfxr.dylib
+/Users/codekrafter/Documents/Code/Projects/CodekraftEngine/build-tool/bin/x64/Release/netcoreapp2.0/osx-x64/ckbuild
+/Users/codekrafter/Documents/Code/Projects/CodekraftEngine/build-tool/bin/x64/Release/netcoreapp2.0/osx-x64/ckbuild.deps.json
+/Users/codekrafter/Documents/Code/Projects/CodekraftEngine/build-tool/bin/x64/Release/netcoreapp2.0/osx-x64/ckbuild.runtimeconfig.json
+/Users/codekrafter/Documents/Code/Projects/CodekraftEngine/build-tool/bin/x64/Release/netcoreapp2.0/osx-x64/ckbuild.runtimeconfig.dev.json
+/Users/codekrafter/Documents/Code/Projects/CodekraftEngine/build-tool/bin/x64/Release/netcoreapp2.0/osx-x64/ckbuild.dll
+/Users/codekrafter/Documents/Code/Projects/CodekraftEngine/build-tool/bin/x64/Release/netcoreapp2.0/osx-x64/ckbuild.pdb
+/Users/codekrafter/Documents/Code/Projects/CodekraftEngine/build-tool/obj/x64/Release/netcoreapp2.0/osx-x64/ckbuild.csproj.CoreCompileInputs.cache
+/Users/codekrafter/Documents/Code/Projects/CodekraftEngine/build-tool/obj/x64/Release/netcoreapp2.0/osx-x64/ckbuild.AssemblyInfoInputs.cache
+/Users/codekrafter/Documents/Code/Projects/CodekraftEngine/build-tool/obj/x64/Release/netcoreapp2.0/osx-x64/ckbuild.AssemblyInfo.cs
+/Users/codekrafter/Documents/Code/Projects/CodekraftEngine/build-tool/obj/x64/Release/netcoreapp2.0/osx-x64/ckbuild.dll
+/Users/codekrafter/Documents/Code/Projects/CodekraftEngine/build-tool/obj/x64/Release/netcoreapp2.0/osx-x64/ckbuild.pdb
