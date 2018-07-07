@@ -146,7 +146,17 @@ namespace ckb
 
             string confString = File.ReadAllText(path);
             proj.parse(confString, settings);
-            CKObject.initUUID(0x0001);
+
+            if (!proj.engine)
+            {
+                File.Exists("");
+            }
+            else
+            {
+                CKObject.initUUID(0x0001);
+            }
+
+
             BuildSelection bs = new BuildSelection(dir);
             HeaderParser hp = new HeaderParser(bs);
             Dictionary<SourceFile, List<CKObject>> objDict = hp.Parse();
