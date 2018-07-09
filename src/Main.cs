@@ -146,10 +146,11 @@ namespace ckb
 
             string confString = File.ReadAllText(path);
             proj.parse(confString, settings);
+            PrintWarning(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData));
 
             if (!proj.engine)
             {
-                File.Exists("");
+                PrintWarning(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData));
             }
             else
             {

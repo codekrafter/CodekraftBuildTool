@@ -7,8 +7,8 @@
       <File FileName="src/SourceFile.cs" Line="14" Column="29" />
       <File FileName="src/HeaderParser.cs" Line="85" Column="30" />
       <File FileName="src/ProjectSettings.cs" Line="12" Column="70" />
-      <File FileName="src/CodeGenerator.cs" Line="134" Column="48" />
-      <File FileName="src/CKObject.cs" Line="15" Column="22" />
+      <File FileName="src/CodeGenerator.cs" Line="134" Column="2" />
+      <File FileName="src/CKObject.cs" Line="15" Column="10" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
