@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.IO;
 using Scriban;
@@ -137,8 +138,14 @@ const unsigned char {{obj.name}}S::getUUID()
  * End of File
  */            
 ");
+                int negaterLength = path.Count(x => x == '/');
+                string negater = "";
+                for(int i = 0;i < negaterLength;i++)
+                {
+                    negater = negater + "../";
+                }
 
-                var header_o = header.Render(new { objects = objs, file = file, includeFile = Path.GetFullPath(dir + "../../" + file.path + "/" + file.name) });
+                var header_o = header.Render(new { objects = objs, file = file, includeFile = Path.GetFullPath(dir + negater + file.path + "/" + file.name) });
 
                 var source_o = source.Render(new { include_name = Path.GetFileNameWithoutExtension(file.name) + ".generated.hpp", objects = objs });
 

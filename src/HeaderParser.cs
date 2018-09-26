@@ -181,6 +181,10 @@ namespace ckb
         string checkLine(string line)
         {
             line = line.Trim();
+            if (line.Length < 3)
+            {
+                return "";
+            }
             bool is_macro = false;
             is_macro = (line.Substring(0, 2) == "CK");
             is_macro = is_macro && (line.Count(x => x == '(') > 0);

@@ -47,7 +47,6 @@ namespace ckb
                 {
                     foreach (char c in a.Substring(1))
                     {
-                        Console.WriteLine(c);
                         ToParse.Add(c.ToString());
                     }
                     continue;
@@ -73,6 +72,25 @@ namespace ckb
                     case "i":
                     case "install":
                         settings.install = true;
+                        break;
+                    case "h":
+                    case "help":
+                        Console.ResetColor();
+                        Console.WriteLine(@"
++======================+
+| Codekraft Build Tool |
++======================+
+    Version: " + settings.version + @"
+
+    -h, --help: Display help text
+
+    -e, --engine: Build in engine mode
+
+    -v, --verbose: Print in verbose mode
+
+    -i, --install: run the install script for project (if specified in configuration)
+                        ");
+                        shouldDie = true;
                         break;
                     default:
                         PrintFatalSoft("Error Parsing Argument '" + a + "': unrecognized argument");
@@ -202,6 +220,9 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 #set(CMAKE_CXX_EXTENSIONS OFF)
 
 set(CMAKE_BUILD_TYPE Debug)
+
+set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
+set(CMAKE_BUILD_RPATH '/usr/local/lib')
 
 file(GLOB SRC ""{{src}}/*.cpp"")
 
