@@ -8,22 +8,38 @@ namespace ckb
     {
         public string name = "";
         public string type = "";
+
+        // Currently limits to 1 template, could be expanded to list of required
+        public string templateType = "";
         public string defaultVal = "";
+
+        public Dictionary<string, string> properties = new Dictionary<string, string>();
+
         public override string ToString()
         {
-            return "{name='" + name + "',type='" + type + "',defaultVal='" + defaultVal + "'}";
+            return "{name=\"" + name + "\",type=\"" + type + "\",defaultVal=\"" + defaultVal + "\",templateType=\"" + templateType + "\"}";
         }
         public string size
         {
             get
             {
-                switch (type)
+                return "getSize(" + name + ")";
+                /*if (type == "AssetRef")
                 {
-                    case "std::string":
-                        return name + ".size() + 1 + sizeof(SizeS)";
-                    default:
-                        return "sizeof(" + type + ")";
+                    return "#error IS_ASSETREF_PLEASE_USE_SIZE_FROM_DATSIZE";
                 }
+                else
+                {
+                    switch (type)
+                    {
+                        case "std::string":
+                            return name + ".size() + 1 + sizeof(SizeS)";
+                        case "std::vector":
+                            return name + ".size() * " + templateType + ") + sizeof(SizeS)";
+                        default:
+                            return "sizeof(" + type + ")";
+                    }
+                }*/
             }
         }
     }

@@ -51,7 +51,7 @@ struct {{obj.name}}S : AssetS
      */
 
     {{ for var in obj.vars }}
-    {{ var.type }} {{ var.name }} {{-if var.default_val | string.size > 0}} = {{ var.default_val }} {{- end }};
+    {{ var.type }}{{- if var.template_type | string.size > 0}}<{{var.template_type}}>{{-end}} {{ var.name }} {{-if var.default_val | string.size > 0}} = {{ var.default_val }} {{- end }};
     {{end}}
 
     /*
@@ -61,7 +61,8 @@ struct {{obj.name}}S : AssetS
     {{obj.name}}S();
     {{obj.name}}S({{obj.name}} *{{obj.name | string.slice 0 1 | string.downcase}});
     virtual {{obj.name}} *asset() override;
-    virtual DatSize save() override;
+    size_t size() override;
+    virtual TrackedData save() override;
     virtual void load(unsigned char *data, size_t size) override;
 
     const virtual unsigned char getUUID() override;
@@ -75,6 +76,9 @@ struct {{obj.name}}S : AssetS
  * End of File
  */
 ");
+
+                // Old Macro Generation Code: S_{{var.type | string.upcase | string.replace ""::"" ""_"" | string.replace "" "" ""_""}}({{ var.name }}{{- if var.template_type | string.size > 0}}, {{var.template_type | string.upcase | string.replace ""::"" ""_"" | string.replace "" "" ""_"" | string.replace ""*"" ""_PTR""}}{{-end}});
+
                 var source = Template.Parse(@"
 #include ""{{- include_name -}}""
 using namespace ck;
@@ -103,24 +107,34 @@ namespace ckg
     return obj;
 };
 
-DatSize {{obj.name}}S::save()
+TrackedData {{obj.name}}S::save()
 {
-    size_t size;
+    size_t size = 0;
     {{ for var in obj.vars }}
     size += {{ var.size }};
     {{end}}
-    START_SAVE()
+    TrackedData data(size);
     {{ for var in obj.vars }}
-    S_{{var.type | string.upcase | string.replace ""::"" ""_"" | string.replace "" "" ""_""}}({{ var.name }});
+    saveProp<{{- if var.template_type | string.size > 0}}{{var.template_type}}{{-else}}{{var.type}}{{-end}}>(data, {{var.name}});
     {{end}}
-    END_SAVE()
+    return data;
 };
+
+size_t {{obj.name}}S::size()
+{
+    size_t size = 0;
+    {{ for var in obj.vars }}
+    size += {{ var.size }};
+    {{end}}
+
+    return size;
+}
 
 void {{obj.name}}S::load(unsigned char *data, size_t size)
 {
     START_LOAD()
     {{ for var in obj.vars }}
-    L_{{var.type | string.upcase | string.replace ""::"" ""_"" | string.replace "" "" ""_""}}({{ var.name }});
+    //L_{{var.type | string.upcase | string.replace ""::"" ""_"" | string.replace "" "" ""_""}}({{ var.name }}{{- if var.template_type | string.size > 0}}, {{var.template_type | string.upcase | string.replace ""::"" ""_"" | string.replace "" "" ""_"" | string.replace ""*"" ""_PTR""}}{{-end}});
     {{end}}
     END_LOAD()
 
@@ -140,7 +154,7 @@ const unsigned char {{obj.name}}S::getUUID()
 ");
                 int negaterLength = path.Count(x => x == '/');
                 string negater = "";
-                for(int i = 0;i < negaterLength;i++)
+                for (int i = 0; i < negaterLength; i++)
                 {
                     negater = negater + "../";
                 }
@@ -156,12 +170,12 @@ const unsigned char {{obj.name}}S::getUUID()
                 Directory.CreateDirectory(dir);
                 if (!File.Exists(header_p) || (File.ReadAllText(header_p) != header_o))
                 {
-                    File.WriteAllText(header_p, header_o);
+                        File.WriteAllText(header_p, header_o);
                 }
 
                 if (!File.Exists(source_p) || (File.ReadAllText(source_p) != source_o))
                 {
-                    File.WriteAllText(source_p, source_o);
+                        File.WriteAllText(source_p, source_o);
                 }
 
             }
@@ -179,6 +193,7 @@ namespace ck
 {
 AssetS *AssetManager::getObject(unsigned char UUID)
 {
+    // List of All AssetS because for the function to be virtual, it must be nonstatic
     {{for obj in objs}}
     {{obj.name}}S {{obj.name}};
     {{- end }}
@@ -196,6 +211,22 @@ AssetS *AssetManager::getObject(unsigned char UUID)
         return nullptr;
     }
 };
+
+AssetS *AssetManager::getObject(Asset *a)
+{
+    {{for obj in objs}}
+    if (typeid(*a) == typeid({{ obj.name }}))
+    {
+        {{ obj.name }} *{{ obj.name | string.downcase | string.truncate 1 '' }} = reinterpret_cast<{{ obj.name }} *>(a);
+        return new {{ obj.name }}S({{ obj.name | string.downcase | string.truncate 1 '' }});
+    }
+    else
+    {{- end }}
+    {
+        LOG(ERROR) << ""Could not find asset of type: \"""" << typeid(a).name() << ""\"""";
+        return nullptr;
+    }
+}
 }
             ");
             var registry_o = registry.Render(new { objs = totalObjs, includes = totalIncludes });

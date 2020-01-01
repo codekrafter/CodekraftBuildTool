@@ -30,6 +30,7 @@ namespace ckb
                 List<CKObject> objs = new List<CKObject>();
                 CKObject currentObj = new CKObject();
                 ushort nextItem = 0;
+                Dictionary<string, string> properties = new Dictionary<string, string>();
                 foreach (string line in File.ReadLines(file.path + "/" + file.name))
                 {
                     if (nextItem > 0)
@@ -72,6 +73,7 @@ namespace ckb
                                 Utils.PrintError("File: " + file.path + "/" + file.name + " Line: " + lineNum);
                             }
                             Variable cvar = new Variable();
+                            int name_offset = 1;
                             if (parts[0].Trim() == "unsigned" || parts[0].Trim() == "signed")
                             {
                                 cvar.type = parts[0] + " " + parts[1];
@@ -82,9 +84,44 @@ namespace ckb
                             }
                             else
                             {
-                                cvar.type = parts[0];
+                                string type = parts[0];
+                                while (type.Contains("<") && !type.Contains(">"))
+                                {
+                                    if (name_offset > parts.Length - 1)
+                                    {
+                                        name_offset--;
+                                        break;
+                                    }
+
+                                    type += parts[name_offset];
+
+                                    name_offset++;
+                                }
+                                if(type.Contains("<"))
+                                {
+                                cvar.templateType = type.Split('<', '>')[1].Trim();
+
+                                cvar.type = type.Split('<')[0].Trim();
+                                } else
+                                {
+                                    cvar.type = type.Trim();
+                                }
+
+                                //string[] globalTypes = {"uint_8", "size_t", "unsigned", "signed", "int", "bool", "char", "long", "short"};
+
+                                /* if(cvar.templateType.Length > 0 && !cvar.templateType.Contains("::") && !globalTypes.Any(cvar.templateType.Contains))
+                                {
+                                    cvar.templateType = "ck::" + cvar.templateType;
+                                }
+
+                                if(!cvar.type.Contains("::") && !globalTypes.Any(cvar.type.Contains))
+                                {
+                                    cvar.type = "ck::" + cvar.type;
+                                }*/
+
+                                cvar.properties = properties;
                             }
-                            cvar.name = parts[1];
+                            cvar.name = parts[name_offset];
                             if (parts.Length > 3)
                             {
                                 cvar.defaultVal = parts[3].Substring(0, parts[3].Length - 1);
@@ -132,7 +169,8 @@ namespace ckb
 
                         if (macro.Length > 0)
                         {
-                            string cmacro = macro.Substring(0, macro.IndexOf("(", StringComparison.CurrentCulture));
+                            string[] splitMacro = macro.Split('(', ')').Where(x => !string.IsNullOrEmpty(x)).ToArray();
+                            string cmacro = splitMacro[0];//macro.Substring(0, macro.IndexOf("(", StringComparison.CurrentCulture));
                             if (cmacro == "CKClass")
                             {
                                 if (currentObj.name.Length > 0)
@@ -148,6 +186,16 @@ namespace ckb
                             else if (cmacro == "CKProperty")
                             {
                                 nextItem = 2;
+                                properties.Clear();
+                                string[] props = splitMacro.Where( x => x.Contains("=")).ToArray();
+                                foreach(string prop in props)
+                                {
+                                    string[] split = prop.Split('=');
+                                    string lhs = split[0];
+                                    string rhs = split[1];
+
+                                    properties.Add(lhs, rhs);
+                                }
                             }
                             else if (cmacro == "CKEvent")
                             {
