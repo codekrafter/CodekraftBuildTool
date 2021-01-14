@@ -152,7 +152,7 @@ const unsigned char {{obj.name}}S::getUUID()
  * End of File
  */            
 ");
-                int negaterLength = path.Count(x => x == '/');
+                int negaterLength = path.Count(x => x == '/' || x == '\\');
                 string negater = "";
                 for (int i = 0; i < negaterLength; i++)
                 {
@@ -207,7 +207,7 @@ AssetS *AssetManager::getObject(unsigned char UUID)
     {
         std::stringstream ss;
         ss << std::hex << std::setfill('0') << std::setw(4) << static_cast<int>(UUID);
-        LOG(ERROR) << ""Could not find asset of UUID: 0x"" << ss.str();
+        LOG(LOG_ERROR) << ""Could not find asset of UUID: 0x"" << ss.str();
         return nullptr;
     }
 };
@@ -223,7 +223,7 @@ AssetS *AssetManager::getObject(Asset *a)
     else
     {{- end }}
     {
-        LOG(ERROR) << ""Could not find asset of type: \"""" << typeid(a).name() << ""\"""";
+        LOG(LOG_ERROR) << ""Could not find asset of type: \"""" << typeid(a).name() << ""\"""";
         return nullptr;
     }
 }

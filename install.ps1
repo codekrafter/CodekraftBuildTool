@@ -23,7 +23,7 @@ if($OS -eq 1 -Or $OS -eq 2) {
 	exit
 }
 
-echo "The Rest Is In Progress"
+echo "Please Install Manually files in bin/"
 exit
 
 cd bin 
